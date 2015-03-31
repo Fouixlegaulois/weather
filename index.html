@@ -3,8 +3,10 @@
 	<head>
 		<meta charset="UTF-8" />
 
+        <!-- STYLE -->
        <LINK rel="stylesheet" type="text/css" href="css/oppagangnamstyle.css">
 
+        <!-- JQUERY -->
         <script src="js/jquery.min.js"></script>
 
         <!-- FONT -->
@@ -87,12 +89,13 @@
             // Set sky
             skyTreatment(temperature, clouds, sunrise, sunset, weather, context, width_global, height_global);
 
+            // Set groud
             groundTreatment(temperature, clouds, sunrise, sunset, context, width_global, height_global);
 
+            // Set sea
             seaTreatment(temperature, clouds, sunrise, sunset, wind, context, width_global, height_global);
 
-            drawPalmier(context, width_global, height_global);
-
+            // Set mountain
             montainTreatment(temperature, context, width_global, height_global)
         }
     }
