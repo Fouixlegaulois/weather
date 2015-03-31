@@ -1,0 +1,31 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
+}
+
+canvas {
+    position:absolute;
+}
+
+#infos {
+    position: absolute;
+    left:  0;
+    top:  0;
+    margin: 20px;
+}
+
+.big {
+    font-weight: 300;
+    color:  #fff;
+    font-size:  20pt;
+}
+
+.small {
+    font-weight: 100;
+    color:  #ccc;
+    font-size:  14pt;
+}

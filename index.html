@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8" />
+
+       <LINK rel="stylesheet" type="text/css" href="css/oppagangnamstyle.css">
+
+        <script src="js/jquery.min.js"></script>
+
+        <!-- FONT -->
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,500' rel='stylesheet' type='text/css'>
+
+        <!-- DRAWING -->
+        <script src="js/drawing.js"></script>
+        <script src="js/algo.js"></script>
+		
+		<script>
+              var latitude;
+              var longitude;
+
+              // Document ready : récupérer les infos du temps
+              $(document).ready(function () {
+                  getLocation();
+                // resize the canvas to fill browser window dynamically
+                window.addEventListener('resize', getLocation, false);
+                var canvas = document.getElementById('canvas');
+                setInterval(function () {getLocation()}, 5000);
+              });
+		</script>
+</head>
+<body>
+
+    <canvas id="canvas" width="800" height="600"></canvas>
+
+
+    <div id="infos"></div>
+
+<script>
+    var x = document.getElementById("infos");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(getWeather);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    // On récupère le temps qu'il fait
+    function getWeather(position) {
+        console.log(position.coords.latitude);
+        console.log(position.coords.longitude);
+        var url = "http://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude;
+        console.log(url);
+        //x.innerHTML += url;
+        var xmlHttp = null;
+
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", url, false);
+        xmlHttp.send(null);
+
+        obj = JSON.parse(xmlHttp.responseText);
+        console.log(obj);
+        // alert("Température:" + obj.main.temp + " Nuages: " + obj.clouds.all);
+        draw(obj.main.temp, obj.clouds.all, obj.sys.sunrise, obj.sys.sunset, obj.wind.speed, obj.weather[0].description);
+        setInformations(obj.main.temp, obj.clouds.all, obj.sys.sunrise, obj.sys.sunset, obj.wind.speed, obj.weather[0].description, obj.name, x)
+    }
+
+    // Draw in canvas
+    function draw(temperature, clouds, sunrise, sunset, wind, weather) {
+
+        if (canvas.getContext) {
+            var context = canvas.getContext('2d');
+
+             window.addEventListener('resize', resizeCanvas, false);
+             window.addEventListener('orientationchange', resizeCanvas, false);
+             resizeCanvas();
+
+            var width_global = window.outerWidth;
+            var height_global = window.outerHeight;
+
+            canvas.width = width_global;
+            canvas.height = height_global;
+
+            context.beginPath();
+
+            // Set sky
+            skyTreatment(temperature, clouds, sunrise, sunset, weather, context, width_global, height_global);
+
+            groundTreatment(temperature, clouds, sunrise, sunset, context, width_global, height_global);
+
+            seaTreatment(temperature, clouds, sunrise, sunset, wind, context, width_global, height_global);
+
+            drawPalmier(context, width_global, height_global);
+
+            montainTreatment(temperature, context, width_global, height_global)
+        }
+    }
+
+    function resizeCanvas() {
+        canvas.width = window.outerWidth;
+        canvas.height = window.outerHeight;
+      }
+
+
+
+</script>
+</body>
+</html>
